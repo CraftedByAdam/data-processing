@@ -1,5 +1,9 @@
 package com.pluralsight.loops;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 public class Person {
     private String firstName;
     private String lastName;
@@ -33,5 +37,10 @@ public class Person {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName + ", " + age + " years old";
     }
 }
