@@ -5,6 +5,7 @@ import com.pluralsight.Person;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Program {
     public static void main(String[] args) {
@@ -14,18 +15,14 @@ public class Program {
         Scanner scanner = new Scanner(System.in);
         String searchName = scanner.nextLine();
 
-        List<Person> matchingPeople = new ArrayList<>();
-        for (Person person : people) {
-            if (person.getFirstName().equalsIgnoreCase(searchName) ||
-                    person.getLastName().equalsIgnoreCase(searchName)) {
-                matchingPeople.add(person);
-            }
-        }
+        //Stream
+        List<Person> matchingPeople = people.stream()
+                        .filter(person -> person.getFirstName().equalsIgnoreCase(searchName) || person.getLastName().equalsIgnoreCase(searchName)).toList();
 
         System.out.println("People with matching name:");
-        for (Person person : matchingPeople) {
-            System.out.println(person.getFirstName() + " " + person.getLastName());
-        }
+
+        //Stream
+        matchingPeople.forEach(person -> System.out.println(person.getFirstName() + " " + person.getLastName()));
 
         //int averageAge = calculateAverageAge(people);
         double averageAge = calculateAverageAge(people);
@@ -64,30 +61,26 @@ public class Program {
     }*/
 
     private static double calculateAverageAge(List<Person> people) {
-        double totalAge = 0;
-        for (Person person : people) {
-            totalAge += person.getAge();
-        }
-        return totalAge / people.size();
+
+        //Stream
+        int toAge = people.stream().map(Person::getAge).reduce(0, (temp, num) -> temp + num);
+        return people.stream().mapToInt(Person::getAge).sum();
     }
 
     private static int findOldestAge(List<Person> people) {
-        int maxAge = Integer.MIN_VALUE;
-        for (Person person : people) {
-            if (person.getAge() > maxAge) {
-                maxAge = person.getAge();
-            }
-        }
+
+        //Stream
+        List<Integer> sortedAges = people.stream().map(Person::getAge).toList();
+        int maxAge = sortedAges.get(sortedAges.size() - 1);
         return maxAge;
     }
 
     private static int findYoungestAge(List<Person> people) {
-        int minAge = Integer.MAX_VALUE;
-        for (Person person : people) {
-            if (person.getAge() < minAge) {
-                minAge = person.getAge();
-            }
-        }
+
+        //Stream
+        List<Integer> sortedAges = people.stream().map(Person::getAge).toList();
+        int minAge = sortedAges.get(0);
         return minAge;
+
     }
 }
